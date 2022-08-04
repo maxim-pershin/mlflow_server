@@ -26,7 +26,7 @@ services:
             - db_datapg:/var/lib/postgresql/data
     sftp:
         restart: always
-        image: "atmoz/sftp:debain"
+        image: atmoz/sftp:debian
         volumes:
           - ./sftp/sshd_config:/etc/ssh/sshd_config
           - ./mlflow/artifacts:/home/mlflow/artifacts
