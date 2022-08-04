@@ -1,0 +1,87 @@
+# This version hides the underlying postgres database on a backend network
+# different from the frontend network on which nginx interfaces mlflow.
+# And mlflow is hidden behind nginx, allowing user auth to be implemented.
+#
+# Have the following environment vars set in shell before running docker-compose
+# (suggested values here but can use whatever desired):
+# export DB_NAME=mlflowdb
+# export DB_USER=postgres
+
+services:
+    db:
+        restart: always
+        image: postgres:latest
+        container_name: mlflow_db
+        expose:
+            - ${DB_PORT}
+        networks:
+            - backend
+        environment:
+            - MUID=$UID
+            - MGID=$GID
+            - POSTGRES_DB=${DB_NAME}
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_PASSWORD=${DB_PW}
+        volumes:
+            - db_datapg:/var/lib/postgresql/data
+    sftp:
+        restart: always
+        image: "atmoz/sftp:debain"
+        volumes:
+          - ./sftp/sshd_config:/etc/ssh/sshd_config
+          - ./mlflow/artifacts:/home/mlflow/artifacts
+        command: mlflow:${SFTP_PW}:::artifacts
+        ports:
+          - "2222:22"
+        networks:
+            - frontend
+            - backend
+    app:
+        restart: always
+        build: ./mlflow
+        image: mlflow_server
+        container_name: mlflow_server
+        # expose:
+        #     - ${MLFLOW_PORT}
+        networks:
+            - frontend
+            - backend
+        environment:
+            - BACKEND=postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
+            - ARTIFACTS=/home/mlflow/artifacts
+        volumes:
+            - mlrun_data:/home/mlflow/artifacts
+        command:
+            - sh    # (sh allows for var substitution of BACKEND and ARTIFACTS)
+            - -c
+            - mlflow server
+                --port ${MLFLOW_PORT}
+                --host 0.0.0.0
+                --backend-store-uri $${BACKEND}
+                --default-artifact-root $${ARTIFACTS}
+        depends_on:
+            - db
+            - sftp
+
+    nginx:
+        restart: always
+        build: ./nginx
+        image: mlflow_nginx
+        container_name: mlflow_nginx
+        ports:
+            # - "${MLFLOW_PORT}:80"
+            - "80:80"
+        networks:
+            - frontend
+        depends_on:
+            - app
+
+networks:
+    frontend:
+        driver: bridge
+    backend:
+        driver: bridge
+
+volumes:
+    db_datapg:
+    mlrun_data:
