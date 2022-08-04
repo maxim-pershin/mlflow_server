@@ -28,8 +28,11 @@ services:
         restart: always
         image: atmoz/sftp:debian
         volumes:
-#          - ./sftp/sshd_config:/etc/ssh/sshd_config
-          - ./mlflow/artifacts:/home/mlflow/artifacts
+            -/etc/ssh/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key:ro
+            -/etc/ssh/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key:ro
+            -/etc/ssh/ssh_host_ecdsa_key:/etc/ssh/ssh_host_ecdsa_key:ro
+#            - ./sftp/sshd_config:/etc/ssh/sshd_config
+            -./mlflow/artifacts:/home/mlflow/artifacts
         command: mlflow:${SFTP_PW}:::artifacts
         ports:
           - "2222:22"
