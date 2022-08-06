@@ -27,6 +27,7 @@ services:
     sftp:
         restart: always
         image: atmoz/sftp:debian
+        container_name: mlflow_sftp
         volumes:
             - /etc/ssh/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key:ro
             - /etc/ssh/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key:ro
@@ -35,7 +36,7 @@ services:
             - ./mlflow/artifacts:/home/mlflow/artifacts
         command: mlflow:${SFTP_PW}:::artifacts
         ports:
-          - "2222:2222"
+          - "2222:22"
         networks:
             - frontend
             - backend
