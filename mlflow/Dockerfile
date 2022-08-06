@@ -9,3 +9,7 @@ RUN ssh-keyscan -H "mlflow_sftp" >> /etc/ssh/ssh_known_hosts
 RUN ssh-keyscan -H "sftp" >> ~/.ssh/known_hosts
 RUN ssh-keyscan -H "mlflow_sftp" >> ~/.ssh/known_hosts
 RUN ssh-keyscan -H "localhost" >> ~/.ssh/known_hosts
+
+COPY /etc/ssh/ssh_host_ed25519_key /etc/ssh/ssh_host_ed25519_key
+COPY /etc/ssh/ssh_host_rsa_key /etc/ssh/ssh_host_rsa_key
+COPY /etc/ssh/ssh_host_ecdsa_key /etc/ssh/ssh_host_ecdsa_key

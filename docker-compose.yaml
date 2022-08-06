@@ -53,10 +53,6 @@ services:
         environment:
             - BACKEND=postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
             - ARTIFACTS=sftp://${SFTP_USER}:${SFTP_PW}@localhost:2222/mlflow/artifacts
-        volumes:
-            - /etc/ssh/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
-            - /etc/ssh/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
-            - /etc/ssh/ssh_host_ecdsa_key:/etc/ssh/ssh_host_ecdsa_key
         command:
             - sh    # (sh allows for var substitution of BACKEND and ARTIFACTS)
             - -c
