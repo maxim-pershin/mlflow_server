@@ -35,7 +35,7 @@ services:
             - ./mlflow/artifacts:/home/mlflow/artifacts
         command: mlflow:${SFTP_PW}:::artifacts
         ports:
-          - "2222:22"
+          - "2222:2222"
         networks:
             - frontend
             - backend
