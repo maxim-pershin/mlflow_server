@@ -52,9 +52,9 @@ services:
             - backend
         environment:
             - BACKEND=postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
-            - ARTIFACTS=/home/mlflow/artifacts
-        volumes:
-            - mlrun_data:/home/mlflow/artifacts
+            - ARTIFACTS=sftp://mlflow@localhost:2222:~/mlflow/mlruns
+#        volumes:
+#            - mlrun_data:/home/mlflow/artifacts
         command:
             - sh    # (sh allows for var substitution of BACKEND and ARTIFACTS)
             - -c
@@ -73,9 +73,7 @@ services:
         image: mlflow_nginx
         container_name: mlflow_nginx
         ports:
-            # - "${MLFLOW_PORT}:80"
             - "80:80"
-#            - "2222:2222"
         networks:
             - frontend
         depends_on:
