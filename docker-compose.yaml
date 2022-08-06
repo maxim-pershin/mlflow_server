@@ -34,7 +34,7 @@ services:
             - /etc/ssh/ssh_host_ecdsa_key:/etc/ssh/ssh_host_ecdsa_key:ro
 #            - ./sftp/sshd_config:/etc/ssh/sshd_config
             - ./mlflow/artifacts:/home/mlflow/artifacts
-        command: mlflow:${SFTP_PW}:::artifacts
+        command: ${SFTP_USER}:${SFTP_PW}:::artifacts
         ports:
           - "2222:22"
         networks:
@@ -52,7 +52,7 @@ services:
             - backend
         environment:
             - BACKEND=postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
-            - ARTIFACTS=sftp://mlflow@localhost:2222/mlflow/artifacts
+            - ARTIFACTS=sftp://${SFTP_USER}:${SFTP_PW}@localhost:2222/mlflow/artifacts
         volumes:
             - /etc/ssh/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key
             - /etc/ssh/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key
