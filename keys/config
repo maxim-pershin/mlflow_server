@@ -1,6 +1,5 @@
 Host mlflow_sftp
      Hostname mlflow_sftp
-     PasswordAuthentication No
+     PasswordAuthentication no
      Port 22
      IdentityFile ~/.ssh/keys/ssh_sftp_key
-     HostKeyAlgorithms=+ssh-dss

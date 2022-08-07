@@ -1,4 +1,4 @@
-FROM python:3.8-slim-buster
+FROM python:3
 RUN pip install mlflow psycopg2-binary pymysql pysftp
-
-RUN apt-get -yq update && apt-get -yqq install ssh
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
