@@ -1,0 +1,5 @@
+Host mlflow
+     Hostname mlflow_sftp
+     Port 22
+     User mlflow
+     IdentityFile ~/.ssh/id_rsa

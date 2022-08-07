@@ -29,10 +29,11 @@ services:
         image: atmoz/sftp:debian
         container_name: mlflow_sftp
         volumes:
-            - /etc/ssh/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key:ro
-            - /etc/ssh/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key:ro
-            - /etc/ssh/ssh_host_ecdsa_key:/etc/ssh/ssh_host_ecdsa_key:ro
+#            - /etc/ssh/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key:ro
+#            - /etc/ssh/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key:ro
+#            - /etc/ssh/ssh_host_ecdsa_key:/etc/ssh/ssh_host_ecdsa_key:ro
 #            - ./sftp/sshd_config:/etc/ssh/sshd_config
+#            - ./pub_keys:./mlflow_sftp/.ssh/keys
             - ./mlflow/artifacts:/home/mlflow/artifacts
         command: ${SFTP_USER}:${SFTP_PW}:::artifacts
         ports:
