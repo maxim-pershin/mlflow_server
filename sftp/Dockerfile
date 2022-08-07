@@ -4,7 +4,6 @@ RUN apk add --no-cache alpine-sdk \
 	openssh \
 	openssl-dev \
 	libffi-dev
-RUN pip install mlflow==1.4.0 psycopg2-binary pysftp
 
 # RUN mkdir -p $HOME/.ssh
 # COPY ./ssh/id_rsa.pub ./.ssh/id_rsa.pub
