@@ -57,6 +57,7 @@ services:
             - ./keys/config:/root/.ssh/config:ro
          #--default-artifact-root $${ARTIFACTS} && ssh-keyscan -H mlflow_sftp >> ~/.ssh/known_hosts
         command:
+            - ssh-keyscan -H mlflow_sftp >> ~/.ssh/known_hosts &&
             - sh    # (sh allows for var substitution of BACKEND and ARTIFACTS)
             - -c
             - mlflow server
