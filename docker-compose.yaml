@@ -53,7 +53,7 @@ services:
             - ARTIFACTS=sftp://${SFTP_USER}:${SFTP_PW}@localhost:2222/mlflow/artifacts
         volumes:
             - ./artifacts:/mlflowserver
-            - ./keys/ssh_sftp_key:/root/.ssh/keys/ssh_sftp_key:ro
+#            - ./keys/ssh_sftp_key:/root/.ssh/keys/ssh_sftp_key:ro
             - ./keys/config:/root/.ssh/config:ro
         command: >
             bash -c "sleep 3
