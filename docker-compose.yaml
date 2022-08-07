@@ -67,7 +67,7 @@ services:
 #                --default-artifact-root $${ARTIFACTS}
         command: >
             bash -c "sleep 3
-            && ssh-keyscan -H mlflow_sftp >> ~/.ssh/known_hosts &&
+            && ssh-keyscan -H mlflow_sftp >> ~/.ssh/known_hosts
             && mlflow server
                 --port 5001
                 --host 0.0.0.0
