@@ -59,10 +59,10 @@ services:
             - sh    # (sh allows for var substitution of BACKEND and ARTIFACTS)
             - -c
             - mlflow server
-            --port ${MLFLOW_PORT}
-            --host 0.0.0.0
-            --backend-store-uri $${BACKEND}
-            --default-artifact-root $${ARTIFACTS}
+                --port ${MLFLOW_PORT}
+                --host 0.0.0.0
+                --backend-store-uri $${BACKEND}
+                --default-artifact-root $${ARTIFACTS}
 #        command: >
 #            bash -c "sleep 3
 #            && ssh-keyscan -H mlflow_sftp >> ~/.ssh/known_hosts
