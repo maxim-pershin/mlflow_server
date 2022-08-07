@@ -1,0 +1,5 @@
+Host mlflow_sftp
+     Hostname mlflow_sftp
+     PasswordAuthentication No
+     Port 22
+     IdentityFile ~/.ssh/keys/ssh_sftp_key

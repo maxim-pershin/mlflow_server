@@ -24,46 +24,47 @@ services:
             - POSTGRES_PASSWORD=${DB_PW}
         volumes:
             - db_datapg:/var/lib/postgresql/data
-    sftp:
+    mlflow_sftp:
         restart: always
-        build: ./sftp
+        image: atmoz/sftp:alpine:debian
         container_name: mlflow_sftp
+        working_dir: "home/mlflow"
         volumes:
-#            - /etc/ssh/ssh_host_ed25519_key:/etc/ssh/ssh_host_ed25519_key:ro
-#            - /etc/ssh/ssh_host_rsa_key:/etc/ssh/ssh_host_rsa_key:ro
-#            - /etc/ssh/ssh_host_ecdsa_key:/etc/ssh/ssh_host_ecdsa_key:ro
-#            - ./sftp/sshd_config:/etc/ssh/sshd_config
-#            - ./pub_keys:./mlflow_sftp/.ssh/keys
             - ./mlflow/artifacts:/home/mlflow/artifacts
-        command: ${SFTP_USER}:${SFTP_PW}:::artifacts
+            - ./keys/ssh_sftp_key.pub:/home/mlflow/.ssh/keys/ssh_sftp_key.pub:ro
+#        command: ${SFTP_USER}:${SFTP_PW}:::artifacts
+        command: mlflow::1001 labs:pass:1002
         ports:
-          - "2222:22"
+          - "22:22"
         networks:
             - frontend
             - backend
-    app:
+    mlflow_server:
         restart: always
         build: ./mlflow
         image: mlflow_server
         container_name: mlflow_server
-#        volumes:
-#            - /ssh/test:/.ssh/ssh
-        # expose:
-        #     - ${MLFLOW_PORT}
+        working_dir: "/mlflow_server"
         networks:
             - frontend
             - backend
         environment:
             - BACKEND=postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
             - ARTIFACTS=sftp://${SFTP_USER}:${SFTP_PW}@localhost:2222/mlflow/artifacts
+        volumes:
+            - ./artifacts:/mlflow_server
+            - ./keys/ssh_sftp_key:/root/.ssh/keys/ssh_sftp_key:ro
+            - ./keys/config:/root/.ssh/config:ro
         command:
+            - ssh-keyscan -H "mlflow_sftp" >> ~/.ssh/known_hosts
             - sh    # (sh allows for var substitution of BACKEND and ARTIFACTS)
             - -c
             - mlflow server
                 --port ${MLFLOW_PORT}
                 --host 0.0.0.0
                 --backend-store-uri $${BACKEND}
-                --default-artifact-root $${ARTIFACTS}
+                --file-store /mlflow_server/mlruns
+#                --default-artifact-root $${ARTIFACTS}
         depends_on:
             - db
             - sftp
