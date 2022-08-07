@@ -26,7 +26,7 @@ services:
             - db_datapg:/var/lib/postgresql/data
     mlflow_sftp:
         restart: always
-        image: atmoz/sftp:alpine:debian
+        image: atmoz/sftp:debian
         container_name: mlflow_sftp
         working_dir: "home/mlflow"
         volumes:
