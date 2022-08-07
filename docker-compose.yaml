@@ -34,6 +34,7 @@ services:
         volumes:
             - ./mlflow/artifacts:/home/mlflow/artifacts
             - ./keys/ssh_sftp_key.pub:/home/mlflow/.ssh/keys/ssh_sftp_key.pub:ro
+            - ./keys/ssh_sftp_key:/etc/ssh/ssh_host_ed25519_key:ro
         command: mlflow::::artifacts
 #        command: mlflow::1001 labs:pass:1002
         ports:
