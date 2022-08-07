@@ -10,4 +10,4 @@ RUN ssh-keyscan -H "sftp" >> ~/.ssh/known_hosts
 RUN ssh-keyscan -H "mlflow_sftp" >> ~/.ssh/known_hosts
 RUN ssh-keyscan -H "localhost" >> ~/.ssh/known_hosts
 
-COPY ./pub_keys ./mlflow_sftp/.ssh/keys
+COPY ./pub_keys/id_rsa.pub ./mlflow_sftp/.ssh/keys/id_rsa.pub
