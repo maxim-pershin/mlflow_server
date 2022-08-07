@@ -66,12 +66,7 @@ services:
 #                --backend-store-uri $${BACKEND}
 #                --default-artifact-root $${ARTIFACTS}
         command: >
-            bash -c "sleep 3
-            && mlflow server
-                --port 5001
-                --host 0.0.0.0
-                --backend-store-uri postgresql://postgres:hy7&7hv2Su$bR#Fxyz@db:5432/mlflowdb
-                --default-artifact-root sftp://mlflow:sftppass@localhost:2222/mlflow/artifacts"
+            bash -c "mlflow server --port 5001 --host 0.0.0.0 --backend-store-uri postgresql://postgres:hy7&7hv2Su$bR#Fxyz@db:5432/mlflowdb --default-artifact-root sftp://mlflow:sftppass@localhost:2222/mlflow/artifacts"
         depends_on:
             - db
             - mlflow_sftp
