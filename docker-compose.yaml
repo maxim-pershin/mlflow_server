@@ -46,6 +46,8 @@ services:
         build: ./mlflow
         image: mlflow_server
         container_name: mlflow_server
+        volumes:
+            - /ssh/test:/.ssh/ssh
         # expose:
         #     - ${MLFLOW_PORT}
         networks:
