@@ -56,13 +56,22 @@ services:
             - ./keys/ssh_sftp_key:/root/.ssh/keys/ssh_sftp_key:ro
             - ./keys/config:/root/.ssh/config:ro
          #--default-artifact-root $${ARTIFACTS} && ssh-keyscan -H mlflow_sftp >> ~/.ssh/known_hosts
-        command: >
-            bash -c "sleep 3
-            && mlflow server
-                --port 5001
+        command:
+            - sh    # (sh allows for var substitution of BACKEND and ARTIFACTS)
+            - -c
+            - mlflow server
+                --port ${MLFLOW_PORT}
                 --host 0.0.0.0
-                --backend-store-uri postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
-                --file-store /ekholabs-mlflow/mlruns"
+                --backend-store-uri $${BACKEND}
+                --default-artifact-root $${ARTIFACTS}
+                --file-store /mlflowserver/mlruns
+#        command: >
+#            bash -c "sleep 3
+#            && mlflow server
+#                --port 5001
+#                --host 0.0.0.0
+#                --backend-store-uri postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
+#                --file-store /mlflowserver/mlruns"
         depends_on:
             - db
             - mlflow_sftp
