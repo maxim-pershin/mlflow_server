@@ -28,7 +28,7 @@ services:
 
     mlflowsftp:
         restart: always
-        image: atmoz/sftp:debian
+        image: atmoz/sftp
         container_name: mlflowsftp
         working_dir: "/home/mlflow"
         volumes:
@@ -63,7 +63,7 @@ services:
         command: >
             bash -c "sleep 3
             && ssh-keyscan -H mlflowsftp >> ~/.ssh/known_hosts
-            && mlflow server --port 5001 --host 0.0.0.0 --backend-store-uri postgresql://postgres:hy77hv2SubR@db:5432/mlflowdb --default-artifact-root sftp://mlflow@localhost:2222/mlflow/artifacts"
+            && mlflow server --port 5001 --host 0.0.0.0 --backend-store-uri postgresql://postgres:hy77hv2SubR@db:5432/mlflowdb --default-artifact-root sftp://mlflow@mlflowsftp:2222/mlflow/artifacts"
         depends_on:
             - db
             - mlflowsftp
