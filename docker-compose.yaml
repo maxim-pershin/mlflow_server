@@ -8,6 +8,7 @@
 # export DB_USER=postgres
 
 services:
+
     db:
         restart: always
         image: postgres:latest
@@ -24,6 +25,7 @@ services:
             - POSTGRES_PASSWORD=${DB_PW}
         volumes:
             - db_datapg:/var/lib/postgresql/data
+
     mlflow_sftp:
         restart: always
         image: atmoz/sftp:debian
@@ -39,12 +41,13 @@ services:
         networks:
             - frontend
             - backend
-    mlflowserver:
+
+    mlflow_server:
         restart: always
         build: ./mlflow
-        image: mlflowserver
-        container_name: mlflowserver
-        working_dir: "/mlflowserver"
+        image: mlflow_server
+        container_name: mlflow_server
+        working_dir: "/mlflow_server"
         networks:
             - frontend
             - backend
@@ -52,7 +55,7 @@ services:
             - BACKEND=postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
             - ARTIFACTS=sftp://${SFTP_USER}:${SFTP_PW}@localhost:2222/mlflow/artifacts
         volumes:
-            - ./artifacts:/mlflowserver
+            - ./artifacts:/mlflow_server
             - ./keys/ssh_sftp_key:/root/.ssh/keys/ssh_sftp_key:ro
             - ./keys/config:/root/.ssh/config:ro
         command: >
@@ -73,14 +76,10 @@ services:
         networks:
             - frontend
         depends_on:
-            - mlflowserver
+            - mlflow_server
 
 networks:
     frontend:
         driver: bridge
     backend:
         driver: bridge
-
-volumes:
-    db_datapg:
-    mlrun_data:
