@@ -1,7 +1,7 @@
 FROM atmoz/sftp:debian
 
 RUN mkdir -p $HOME/.ssh
-COPY ssh/id_rsa.pub ssh/id_rsa ssh/config /root/.ssh/
-RUN chmod 700 /root/.ssh && \
-    chmod 600 /root/.ssh/id_rsa && \
-    chmod 644 /root/.ssh/id_rsa.pub
+COPY sftp/ssh/id_rsa.pub sftp/ssh/id_rsa sftp/ssh/config $HOME/.ssh/
+RUN chmod 700 $HOME/.ssh && \
+    chmod 600 $HOME/.ssh/id_rsa && \
+    chmod 644 $HOME/.ssh/id_rsa.pub
