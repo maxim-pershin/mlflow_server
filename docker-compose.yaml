@@ -34,8 +34,8 @@ services:
         volumes:
             - ./mlflow/artifacts:/home/mlflow/artifacts
             - ./keys/ssh_sftp_key.pub:/home/mlflow/.ssh/keys/ssh_sftp_key.pub:ro
-#        command: ${SFTP_USER}:${SFTP_PW}:::artifacts
-        command: mlflow::1001 labs:pass:1002
+        command: mlflow::::artifacts
+#        command: mlflow::1001 labs:pass:1002
         ports:
           - "2222:22"
         networks:
@@ -58,6 +58,8 @@ services:
             - ./artifacts:/mlflow_server
             - ./keys/ssh_sftp_key:/root/.ssh/keys/ssh_sftp_key:ro
             - ./keys/config:/root/.ssh/config:ro
+        links:
+            - "mlflow_sftp:mlflow_sftp"
         command: >
             bash -c "sleep 3
             && ssh-keyscan -H mlflow_sftp >> ~/.ssh/known_hosts
