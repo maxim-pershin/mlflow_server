@@ -28,7 +28,7 @@ services:
         restart: always
         image: atmoz/sftp:debian
         container_name: mlflow_sftp
-        working_dir: "home/mlflow"
+        working_dir: "/home/mlflow"
         volumes:
             - ./mlflow/artifacts:/home/mlflow/artifacts
             - ./keys/ssh_sftp_key.pub:/home/mlflow/.ssh/keys/ssh_sftp_key.pub:ro
