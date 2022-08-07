@@ -42,12 +42,12 @@ services:
             - frontend
             - backend
 
-    mlflow_server:
+    mlflowserver:
         restart: always
         build: ./mlflow
-        image: mlflow_server
-        container_name: mlflow_server
-        working_dir: "/mlflow_server"
+        image: mlflowserver
+        container_name: mlflowserver
+        working_dir: "/mlflowserver"
         networks:
             - frontend
             - backend
@@ -55,7 +55,7 @@ services:
             - BACKEND=postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
             - ARTIFACTS=sftp://${SFTP_USER}:${SFTP_PW}@localhost:2222/mlflow/artifacts
         volumes:
-            - ./artifacts:/mlflow_server
+            - ./artifacts:/mlflowserver
             - ./keys/ssh_sftp_key:/root/.ssh/keys/ssh_sftp_key:ro
             - ./keys/config:/root/.ssh/config:ro
         links:
@@ -78,7 +78,7 @@ services:
         networks:
             - frontend
         depends_on:
-            - mlflow_server
+            - mlflowserver
 
 networks:
     frontend:
