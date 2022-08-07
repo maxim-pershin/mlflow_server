@@ -35,7 +35,7 @@ services:
 #        command: ${SFTP_USER}:${SFTP_PW}:::artifacts
         command: mlflow::1001 labs:pass:1002
         ports:
-          - "22:22"
+          - "2222:22"
         networks:
             - frontend
             - backend
