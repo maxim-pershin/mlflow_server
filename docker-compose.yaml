@@ -56,22 +56,22 @@ services:
             - ./keys/ssh_sftp_key:/root/.ssh/keys/ssh_sftp_key:ro
             - ./keys/config:/root/.ssh/config:ro
          #--default-artifact-root $${ARTIFACTS} && ssh-keyscan -H mlflow_sftp >> ~/.ssh/known_hosts
-        command:
-            - ssh-keyscan -H mlflow_sftp >> ~/.ssh/known_hosts &&
-            - sh    # (sh allows for var substitution of BACKEND and ARTIFACTS)
-            - -c
-            - mlflow server
-                --port ${MLFLOW_PORT}
-                --host 0.0.0.0
-                --backend-store-uri $${BACKEND}
-                --default-artifact-root $${ARTIFACTS}
-#        command: >
-#            bash -c "sleep 3
-#            && mlflow server
-#                --port 5001
+#        command:
+#            - ssh-keyscan -H mlflow_sftp >> ~/.ssh/known_hosts &&
+#            - sh    # (sh allows for var substitution of BACKEND and ARTIFACTS)
+#            - -c
+#            - mlflow server
+#                --port ${MLFLOW_PORT}
 #                --host 0.0.0.0
-#                --backend-store-uri postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
-#                --file-store /mlflowserver/mlruns"
+#                --backend-store-uri $${BACKEND}
+#                --default-artifact-root $${ARTIFACTS}
+        command: >
+            bash -c "sleep 3
+            && ssh-keyscan -H mlflow_sftp >> ~/.ssh/known_hosts &&
+            && mlflow server
+                --port 5001
+                --host 0.0.0.0
+                --backend-store-uri postgresql://postgres:hy7&7hv2Su$bR#Fxyz@db:5432/mlflowdb"
         depends_on:
             - db
             - mlflow_sftp
