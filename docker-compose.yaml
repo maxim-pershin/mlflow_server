@@ -59,10 +59,10 @@ services:
         command: >
             bash -c "sleep 3
             && mlflow server
-                --port ${MLFLOW_PORT}
+                --port 5001
                 --host 0.0.0.0
-                --backend-store-uri $${BACKEND}
-                --default-artifact-root $${ARTIFACTS}"
+                --backend-store-uri postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
+                --file-store /ekholabs-mlflow/mlruns"
         depends_on:
             - db
             - mlflow_sftp
