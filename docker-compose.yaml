@@ -62,7 +62,6 @@ services:
                 --port ${MLFLOW_PORT}
                 --host 0.0.0.0
                 --backend-store-uri $${BACKEND}
-#                --default-artifact-root $${ARTIFACTS}
                 --file-store /mlflowserver/mlruns
 #        command: >
 #            bash -c "sleep 3
