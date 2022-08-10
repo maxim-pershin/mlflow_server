@@ -9,6 +9,23 @@
 
 services:
 
+    minio:
+        restart: always
+        image: minio/minio
+        networks:
+            - frontend
+            - backend
+        container_name: darkt-minio
+        working_dir: "/minio/storage"
+        volumes:
+            - minio_storage:/minio/storage
+        ports:
+            - "9000:9000"
+        environment:
+            MINIO_ACCESS_KEY: "minio_id"
+            MINIO_SECRET_KEY: "minio_key"
+        command: server /minio/storage
+
     db:
         restart: always
         image: postgres:latest
@@ -26,23 +43,6 @@ services:
         volumes:
             - db_datapg:/var/lib/postgresql/data
 
-    mlflowsftp:
-        restart: always
-        image: atmoz/sftp
-        container_name: mlflowsftp
-        working_dir: "/home/mlflow"
-        volumes:
-            - ./mlflow/artifacts:/home/mlflow/artifacts
-            - ./keys/ssh_sftp_key.pub:/home/mlflow/.ssh/keys/ssh_sftp_key.pub:ro
-            - ./keys/ssh_sftp_key:/etc/ssh/ssh_host_ed25519_key:ro
-        command: mlflow::::artifacts
-#        command: mlflow::1001 labs:pass:1002
-        ports:
-          - "2222:22"
-        networks:
-            - frontend
-            - backend
-
     mlflowserver:
         restart: always
         build: ./mlflow
@@ -57,14 +57,16 @@ services:
             - ARTIFACTS=sftp://${SFTP_USER}:${SFTP_PW}@localhost:2222/mlflow/artifacts
         volumes:
             - ./artifacts:/mlflowserver
-            - ./keys/ssh_sftp_key:/root/.ssh/keys/ssh_sftp_key:ro
-            - ./keys/config:/root/.ssh/config:ro
         links:
             - "mlflowsftp:mlflowsftp"
-        command: >
-            bash -c "sleep 3
-            && ssh-keyscan -H mlflowsftp >> ~/.ssh/known_hosts
-            && mlflow server --port 5001 --host 0.0.0.0 --backend-store-uri postgresql://postgres:hy77hv2SubR@db:5432/mlflowdb --default-artifact-root sftp://mlflow@mlflowsftp:2222/mlflow/artifacts"
+        command:
+            - sh    # (sh allows for var substitution of BACKEND and ARTIFACTS)
+            - -c
+            - mlflow server
+                --port ${MLFLOW_PORT}
+                --host 0.0.0.0
+                --backend-store-uri $${BACKEND}
+                --default-artifact-root $${ARTIFACTS}
         depends_on:
             - db
             - mlflowsftp
@@ -81,6 +83,24 @@ services:
         depends_on:
             - mlflowserver
 
+
+#    mlflowsftp:
+#        restart: always
+#        image: atmoz/sftp
+#        container_name: mlflowsftp
+#        working_dir: "/home/mlflow"
+#        volumes:
+#            - ./mlflow/artifacts:/home/mlflow/artifacts
+#            - ./keys/ssh_sftp_key.pub:/home/mlflow/.ssh/keys/ssh_sftp_key.pub:ro
+#            - ./keys/ssh_sftp_key:/etc/ssh/ssh_host_ed25519_key:ro
+#        command: mlflow::::artifacts
+##        command: mlflow::1001 labs:pass:1002
+#        ports:
+#          - "2222:22"
+#        networks:
+#            - frontend
+#            - backend
+
 networks:
     frontend:
         driver: bridge
@@ -89,3 +109,4 @@ networks:
 
 volumes:
     db_datapg:
+    minio_storage:

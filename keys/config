@@ -1,5 +1,0 @@
-Host mlflowsftp
-     Hostname mlflowsftp
-     PasswordAuthentication no
-     Port 22
-     IdentityFile ~/.ssh/keys/ssh_sftp_key
