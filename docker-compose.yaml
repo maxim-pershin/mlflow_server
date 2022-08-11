@@ -25,7 +25,7 @@ services:
             - MINIO_ROOT_USER=access_key
             - MINIO_ROOT_PASSWORD=secret_key
         entrypoint: sh
-        command: -c 'mkdir -p /minio/storage/mlflow-artifacts && /usr/bin/minio server /minio/storage'
+        command: -c 'mkdir -p /minio/storage/mlflow-artifacts && minio server /minio/storage'
 
 
     db:
