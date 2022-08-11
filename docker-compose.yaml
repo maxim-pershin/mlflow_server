@@ -15,7 +15,7 @@ services:
         networks:
             - frontend
             - backend
-        container_name: darkt-minio
+        container_name: minio
         working_dir: "/minio/storage"
         volumes:
             - minio_storage:/minio/storage
@@ -53,6 +53,8 @@ services:
         networks:
             - frontend
             - backend
+        volumes:
+            - ./mlruns:/mlruns
         environment:
             - BACKEND=postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
             - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
