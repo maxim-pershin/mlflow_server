@@ -20,10 +20,11 @@ services:
             - minio_storage:/minio/storage
         ports:
             - 9000:9000
+            - 9001:9001
         environment:
             - MINIO_ROOT_USER=access_key
             - MINIO_ROOT_PASSWORD=secret_key
-        command: server /minio/storage
+        command: server /minio/storage --console-address ":9001"
 
     db:
         restart: always
