@@ -54,7 +54,7 @@ services:
             - frontend
             - backend
         volumes:
-            - ./mlruns:/mlruns
+            - mlruns:/mlruns
         environment:
             - BACKEND=postgresql://${DB_USER}:${DB_PW}@db:${DB_PORT}/${DB_NAME}
             - MLFLOW_S3_ENDPOINT_URL=http://minio:9000
@@ -111,3 +111,4 @@ networks:
 volumes:
     db_datapg:
     minio_storage:
+    mlruns:
