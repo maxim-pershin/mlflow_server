@@ -22,9 +22,9 @@ services:
         ports:
             - "9000:9000"
         environment:
-            - MINIO_ACCESS_KEY=access_key
-            - MINIO_SECRET_KEY=secret_key
-            - MINIO_REGION_NAME=k8s00-local
+            - MINIO_ROOT_USER=access_key
+            - MINIO_ROOT_PASSWORD=secret_key
+#            - MINIO_REGION_NAME=k8s00-local
         command: server /minio/storage
 
     db:
