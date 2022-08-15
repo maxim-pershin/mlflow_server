@@ -20,12 +20,12 @@ services:
             - minio_storage:/minio/storage
         ports:
             - 9000:9000
-            - 8020:9001
+            - 8020:8020
         environment:
             - MINIO_ROOT_USER=access_key
             - MINIO_ROOT_PASSWORD=secret_key
         entrypoint: sh
-        command: -c 'mkdir -p /minio/storage/mlflow-artifacts && minio server /minio/storage --console-address ":9001"'
+        command: -c 'mkdir -p /minio/storage/mlflow-artifacts && minio server /minio/storage --console-address ":8020"'
 
     db:
         restart: always
