@@ -1,26 +1,19 @@
-variable "databricks_account_username" {
+variable "AWS_ACCESS_KEY_ID" {
   type      = string
   sensitive = true
 }
-variable "databricks_account_password" {
-  type      = string
-  sensitive = true
-}
-variable "databricks_account_id" {
+variable "AWS_SECRET_ACCESS_KEY" {
   type      = string
   sensitive = true
 }
 
-variable "aws_access_key_id" {
+variable "AWS_SESSION_TOKEN" {
   type      = string
   sensitive = true
-}
-variable "aws_secret_access_key" {
-  type      = string
-  sensitive = true
+  description = "Temporary session token used to create instances"
 }
 
-variable "aws_region" {
+variable "AWS_REGION" {
   default = "us-west-2"
 }
 
@@ -39,5 +32,3 @@ variable "vpc_name" {
 variable "vpc_cidr_block" {
   default = "10.4.0.0/16"
 }
-
-variable "workspace_name" {}
